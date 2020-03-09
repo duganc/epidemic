@@ -6,10 +6,10 @@ class GraphTests(unittest.TestCase):
 	def test_partition_generator_generates(self):
 		nodes = {Node(i) for i in range(0, 5)}
 		size_space = DiscreteProbabilitySpace({1: 0.5, 2: 0.5})
-		generator = PartitionGenerator(nodes, size_space, 0.5, allow_remainder=True)
+		generator = PartitionGenerator(nodes)
 		self.assertTrue(isinstance(generator, PartitionGenerator))
 
-		graph = generator.generate()
+		graph = generator.generate(size_space, 0.5)
 		self.assertTrue(isinstance(graph, Graph))
 		self.assertEqual(graph.get_nodes(), nodes)
 

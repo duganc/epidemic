@@ -6,31 +6,27 @@ from copy import deepcopy
 
 class PartitionGenerator:
 
-	def __init__(self, nodes, size_space, weight, allow_remainder=True):
+	def __init__(self, nodes):
 		assert type(nodes) == set
 		assert all(isinstance(node, Node) for node in nodes)
+
+		self._nodes = nodes
+
+	def generate(self, size_space, weight):
 		assert isinstance(size_space, DiscreteProbabilitySpace)
 		assert size_space.are_keys_positive_ints()
 		assert type(weight) == float
 		assert 0.0 <= weight <= 1.0
-		assert type(allow_remainder) == bool
-
-		self._nodes = nodes
-		self._size_space = size_space
-		self._weight = weight
-		self._allow_remainder = allow_remainder
-
-	def generate(self):
 		
 		nodes_left = self.get_nodes()
 		graph = Graph(self.get_nodes())
 
 		while len(nodes_left) > 0:
-			n = self._size_space.draw()
+			n = size_space.draw()
 			assert type(n) == int
 			assert n > 0
 			cluster = set(random.sample(nodes_left, min(n, len(nodes_left))))
-			graph.add_complete_subgraph(cluster, self._weight)
+			graph.add_complete_subgraph(cluster, weight)
 			nodes_left = nodes_left - cluster
 
 		return graph
